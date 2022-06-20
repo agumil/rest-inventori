@@ -1,0 +1,6 @@
+{
+    "require": {
+        "fzaninotto/faker": "^1.9",
+        "chriskacerguis/codeigniter-restserver": "^3.1"
+    }
+}
