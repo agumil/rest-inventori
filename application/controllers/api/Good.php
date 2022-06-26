@@ -14,7 +14,7 @@ class Good extends RestController
     public function good_get(?string $goodid = null)
     {
         if (empty($goodid)) {
-            $result = $this->goods_model->get_all();
+            $result = $this->goods_model->get_all_goods();
             $data = [
                 'status' => 'success',
                 'goods' => $result !== false ? $result : [],
@@ -34,53 +34,96 @@ class Good extends RestController
 
     public function good_post()
     {
-        $input = $this->input->post();
+        $input = $this->post();
 
         $data = [
-            'name' => $input['name'],
+            'brand_id' => $input['brand_id'] ?? '',
+            'measurement_id' => $input['measurement_id'] ?? '',
+            'color_id' => $input['color_id'] ?? '',
+            'material' => $input['material'] ?? '',
+            'name' => $input['name'] ?? '',
+            'quantity' => $input['quantity'] ?? '',
         ];
 
-        $is_inserted = $this->goods_model->insert($data);
-        if ($is_inserted === false) {
-            $this->response(['status' => 'error'], 400);
+        $this->form_validation->set_data($data);
+        $is_valid = $this->form_validation->run('good_post');
+        if (!$is_valid) {
+            $this->response([
+                'status' => 'error',
+                'message' => $this->form_validation->error_string(),
+            ], 400);
         }
 
-        $this->response(['status' => 'success'], 200);
+        $is_inserted = $this->goods_model->insert($data);
+        if (!$is_inserted) {
+            $this->response([
+                'status' => 'error',
+                'message' => FAILED_INSERT,
+            ], 400);
+        }
+
+        $this->response([
+            'status' => 'success',
+            'message' => SUCCESS_INSERT,
+        ], 200);
     }
 
     public function good_put(?string $goodid = null)
     {
         if (empty($goodid)) {
-            $this->response(['message' => 'error'], 400);
+            $this->response([
+                'status' => 'error',
+                'message' => 'Good ID is missing.',
+            ], 400);
         }
 
-        $input = $this->input->post();
+        $input = $this->put();
 
         $data = [
-            'name' => !empty($input['name']) ? $input['name'] : '',
+            'brand_id' => $input['brand_id'] ?? '',
+            'measurement_id' => $input['measurement_id'] ?? '',
+            'color_id' => $input['color_id'] ?? '',
+            'material' => $input['material'] ?? '',
+            'name' => $input['name'] ?? '',
+            'quantity' => $input['quantity'] ?? '',
         ];
 
         $data = array_unset_empty($data);
 
         $is_updated = $this->goods_model->update($data, $goodid);
-        if ($is_updated === false) {
-            $this->response(['status' => 'error'], 400);
+        if (!$is_updated) {
+            $this->response([
+                'status' => 'error',
+                'message' => FAILED_UPDATE,
+            ], 400);
         }
 
-        $this->response(['status' => 'success'], 200);
+        $this->response([
+            'status' => 'success',
+            'message' => SUCCESS_UPDATE,
+        ], 200);
     }
 
     public function good_delete(?string $goodid = null)
     {
         if (empty($goodid)) {
-            $this->response(['status' => 'error'], 400);
+            $this->response([
+                'status' => 'error',
+                'message' => 'Good ID is missing.',
+            ], 400);
         }
 
         $is_deleted = $this->goods_model->delete($goodid);
         if ($is_deleted === false) {
-            $this->response(['status' => 'error'], 400);
+            $this->response([
+                'status' => 'error',
+                'message' => FAILED_DELETE,
+            ], 400);
         }
 
-        $this->response(['status' => 'success'], 200);
+        $this->response([
+            'status' => 'success',
+            'message' => SUCCESS_DELETE,
+        ], 200);
     }
 }

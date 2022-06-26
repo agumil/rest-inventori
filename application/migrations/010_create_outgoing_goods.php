@@ -22,10 +22,23 @@ class Migration_Create_outgoing_goods extends CI_Migration
                 'type' => 'INT',
                 'auto_increment' => true,
             ],
-            'sku_code' => [
+            'brand_id' => [
+                'type' => 'INT',
+                'null' => true,
+            ],
+            'measurement_id' => [
+                'type' => 'INT',
+            ],
+            'color_id' => [
+                'type' => 'INT',
+            ],
+            'material' => [
+                'type' => 'TEXT',
+                'null' => true,
+            ],
+            'name' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
-                'null' => true,
             ],
             'quantity' => [
                 'type' => 'INT',
@@ -45,6 +58,7 @@ class Migration_Create_outgoing_goods extends CI_Migration
 
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('id', true);
+        $this->dbforge->add_key(['brand_id', 'measurement_id', 'color_id']);
         $this->dbforge->create_table($this->table, true, $this->options);
     }
 

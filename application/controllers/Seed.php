@@ -140,7 +140,7 @@ class Seed extends CI_Controller
             return false;
         }
 
-        echo 'Success! All tables has been seeded.';
+        echo 'Success! All tables has been seeded.' . PHP_EOL;
         return false;
     }
 
@@ -165,7 +165,14 @@ class Seed extends CI_Controller
 
         $faker = Faker\Factory::create();
 
-        $data = [];
+        $data[] = [
+            'role_id' => 1,
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'admin@testmail.dev',
+            'password' => password_hash('admin', PASSWORD_BCRYPT),
+        ];
+
         for ($i = 0; $i < $num_of_users; $i++) {
             $data[] = [
                 'role_id' => random_int(1, count($this->roles)),

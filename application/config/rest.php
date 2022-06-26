@@ -523,7 +523,7 @@ $config['rest_ignore_http_accept'] = false;
 | Hint: This is good for production environments
 |
  */
-$config['rest_ajax_only'] = true;
+$config['rest_ajax_only'] = false;
 
 /*
 |--------------------------------------------------------------------------
@@ -545,7 +545,7 @@ $config['rest_language'] = 'english';
 | will access it through a browser
 |
  */
-$config['check_cors'] = false;
+$config['check_cors'] = true;
 
 /*
 |--------------------------------------------------------------------------
@@ -602,7 +602,9 @@ $config['allow_any_cors_domain'] = false;
 | e.g. $config['allowed_origins'] = ['http://www.example.com', 'https://spa.example.com']
 |
  */
-$config['allowed_cors_origins'] = [];
+$config['allowed_cors_origins'] = [
+    'http://inventori.localhost',
+];
 
 /*
 |--------------------------------------------------------------------------

@@ -13,10 +13,22 @@ class Auth extends RestController
 
     public function login_post()
     {
-        $email = $this->input->post('email');
-        $password = $this->input->post('password');
+        $data = [
+            'email' => $this->input->post('email'),
+            'password' => $this->input->post('password'),
+        ];
 
-        $user = $this->users_model->where('email', $email)->get();
+        $this->form_validation->set_data($data);
+        $is_valid = $this->form_validation->run('login_post');
+        if (!$is_valid) {
+            $data = [
+                'status' => 'error',
+                'message' => $this->form_validation->error_string(),
+            ];
+            $this->response($data, 400);
+        }
+
+        $user = $this->users_model->where('email', $data['email'])->get();
         if ($user === false) {
             $data = [
                 'status' => 'error',
@@ -25,7 +37,7 @@ class Auth extends RestController
             $this->response($data, 400);
         }
 
-        $is_verified = password_verify($password, $user->password);
+        $is_verified = password_verify($data['password'], $user->password);
         if (!$is_verified) {
             $data = [
                 'status' => 'error',
@@ -34,21 +46,13 @@ class Auth extends RestController
             $this->response($data, 400);
         }
 
-        $_SESSION['userid'] = $user->id;
-        $_SESSION['roleid'] = $user->roleid;
-        $_SESSION['firstname'] = $user->firstname;
-        $_SESSION['lastname'] = $user->lastname;
+        $user_data = [
+            'userid' => $user->id,
+            'roleid' => $user->role_id,
+            'firstname' => $user->firstname,
+            'lastname' => $user->lastname,
+        ];
 
-        $this->response(['status' => 'success'], 200);
+        $this->response(['status' => 'success', 'user' => $user_data], 200);
     }
-
-    public function logout_post()
-    {
-        if (!session_destroy()) {
-            $this->response(['status' => 'error'], 422);
-        }
-
-        $this->response(['status' => 'success'], 200);
-    }
-
 }

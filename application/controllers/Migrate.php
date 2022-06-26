@@ -21,12 +21,13 @@ class Migrate extends CI_Controller
         }
     }
 
-    public function down(string $input)
+    public function down(?string $input = null)
     {
+        $input = strtolower($input);
         $allowed_input = ['y', 't'];
 
         if (!in_array($input, $allowed_input)) {
-            echo "Input anda tidak valid !" . PHP_EOL;
+            echo "Input anda tidak valid ! Hanya menerima 'y' atau 't'" . PHP_EOL;
             exit;
         }
 

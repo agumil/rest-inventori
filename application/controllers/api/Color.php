@@ -34,55 +34,95 @@ class Color extends RestController
 
     public function color_post()
     {
-        $input = $this->input->post();
+        $input = $this->post();
 
         $data = [
-            'name' => $input['name'],
-            'code' => $input['code'],
+            'name' => $input['name'] ?? '',
+            'code' => $input['code'] ?? '',
         ];
+
+        $this->form_validation->set_data($data);
+        $is_valid = $this->form_validation->run('color_post');
+        if (!$is_valid) {
+            $this->response([
+                'status' => 'error',
+                'message' => $this->form_validation->error_string(),
+            ], 400);
+        }
 
         $is_inserted = $this->colors_model->insert($data);
         if ($is_inserted === false) {
-            $this->response(['status' => 'error'], 400);
+            $this->response([
+                'status' => 'error',
+                'message' => FAILED_INSERT,
+            ], 400);
         }
 
-        $this->response(['status' => 'success'], 200);
+        $this->response([
+            'status' => 'success',
+            'message' => SUCCESS_INSERT,
+        ], 200);
     }
 
     public function color_put(?string $colorid = null)
     {
         if (empty($colorid)) {
-            $this->response(['message' => 'error'], 400);
+            $this->response([
+                'status' => 'error',
+                'message' => 'Color Id is missing',
+            ], 400);
         }
 
-        $input = $this->input->post();
+        $input = $this->put();
 
         $data = [
-            'name' => !empty($input['name']) ? $input['name'] : '',
-            'code' => !empty($input['code']) ? $input['code'] : '',
+            'name' => $input['name'] ?? '',
+            'code' => $input['code'] ?? '',
         ];
 
-        $data = array_unset_empty($data);
+        $this->form_validation->set_data($data);
+        $is_valid = $this->form_validation->run('color_post');
+        if (!$is_valid) {
+            $this->response([
+                'status' => 'error',
+                'message' => $this->form_validation->error_string(),
+            ], 400);
+        }
 
         $is_updated = $this->colors_model->update($data, $colorid);
         if ($is_updated === false) {
-            $this->response(['status' => 'error'], 400);
+            $this->response([
+                'status' => 'error',
+                'message' => FAILED_UPDATE,
+            ], 400);
         }
 
-        $this->response(['status' => 'success'], 200);
+        $this->response([
+            'status' => 'success',
+            'message' => SUCCESS_UPDATE,
+        ], 200);
     }
 
     public function color_delete(?string $colorid = null)
     {
         if (empty($colorid)) {
-            $this->response(['status' => 'error'], 400);
+            $this->response([
+                'status' => 'error',
+                'message' => 'Color Id is missing',
+            ], 400);
         }
 
         $is_deleted = $this->colors_model->delete($colorid);
         if ($is_deleted === false) {
-            $this->response(['status' => 'error'], 400);
+            $this->response([
+                'status' => 'error',
+                'message' => FAILED_DELETE,
+            ], 400);
         }
 
-        $this->response(['status' => 'success'], 200);
+        $this->response([
+            'status' => 'success',
+            'message' => SUCCESS_DELETE,
+        ], 200);
     }
 }
