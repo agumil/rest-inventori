@@ -523,7 +523,7 @@ $config['rest_ignore_http_accept'] = false;
 | Hint: This is good for production environments
 |
  */
-$config['rest_ajax_only'] = false;
+$config['rest_ajax_only'] = true;
 
 /*
 |--------------------------------------------------------------------------
@@ -589,7 +589,7 @@ $config['allowed_cors_methods'] = [
 | source domain
 |
  */
-$config['allow_any_cors_domain'] = false;
+$config['allow_any_cors_domain'] = true;
 
 /*
 |--------------------------------------------------------------------------
@@ -603,7 +603,7 @@ $config['allow_any_cors_domain'] = false;
 |
  */
 $config['allowed_cors_origins'] = [
-    'http://inventori.localhost',
+    'http://172.27.0.6',
 ];
 
 /*
@@ -625,4 +625,6 @@ $config['allowed_cors_origins'] = [
 | http://docs.sencha.com/extjs/6.5.2/classic/Ext.data.proxy.Rest.html#cfg-withCredentials
 |
  */
-$config['forced_cors_headers'] = [];
+$config['forced_cors_headers'] = [
+    'X-Content-Type-Options' => 'nosniff',
+];

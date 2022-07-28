@@ -1,8 +1,6 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
-use chriskacerguis\RestServer\RestController;
-
-class User extends RestController
+class User extends MY_Controller
 {
     public function __construct()
     {
